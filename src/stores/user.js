@@ -23,7 +23,6 @@ export const useUserStore = defineStore('user', () => {
                 return false
             }
             const payload = data?.data?.[0] || {}
-            isLogin.value = true
             userInfo.token = payload.token || ''
             userInfo.refToken = payload.refToken || ''
             return true
@@ -50,7 +49,7 @@ export const useUserStore = defineStore('user', () => {
         const isPass = await verifyData(account, passWord)
         const isGet = await getProfile()
         if(isPass&&isGet){
-            isLogin.value = false
+            isLogin.value = true
             ElMessage.success('登录成功')
             return true
         }
