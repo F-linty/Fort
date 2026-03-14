@@ -9,7 +9,7 @@ export const useUserStore = defineStore('user', () => {
         refToken: ''
     })
     const verifyData = async(account,passWord) => {
-        const user = await fetch(`http://localhost:3000/users/login`, {
+        const user = await fetch(`https://back-production-1f03.up.railway.app/users/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ export const useUserStore = defineStore('user', () => {
         userInfo.refToken = payload.refToken || ''
     }
     const getProfile = async () => {
-        const profile = await fetch(`http://localhost:3000/users`, {
+        const profile = await fetch(`https://back-production-1f03.up.railway.app/users`, {
             headers: {
                 'Authorization': `Bearer ${userInfo.token}`
             }
