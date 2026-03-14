@@ -1,7 +1,6 @@
 <script setup>
 import { ref, defineEmits, defineProps, computed } from 'vue'
 import { useUserStore } from '@/stores/user'
-import { ElMessage } from 'element-plus'
 
 const emits = defineEmits(['update:visible', 'login-success'])
 const props = defineProps({

@@ -12,6 +12,7 @@ const loginVisible = ref(false)
 import Login from './Login.vue'
 const handleLoginSuccess = () => {
     // TODO 预留后续逻辑
+    isLogin = !isLogin
 }
 
 const handleLogout = () => {
