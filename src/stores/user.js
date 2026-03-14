@@ -9,7 +9,6 @@ export const useUserStore = defineStore('user', () => {
         refToken: ''
     })
     const verifyData = async (account, passWord) => {
-        try {
             const user = await fetch(`https://back-production-1f03.up.railway.app/users/login`, {
                 method: 'POST',
                 headers: {
@@ -20,44 +19,42 @@ export const useUserStore = defineStore('user', () => {
             const data = await user.json()
             if (!user.ok) {
                 const msg = data?.message || `请求失败: ${user.status}`
-                throw new Error(msg)
+                ElMessage.error(msg || '登录失败')
+                return false
             }
             const payload = data?.data?.[0] || {}
             isLogin.value = true
             userInfo.token = payload.token || ''
             userInfo.refToken = payload.refToken || ''
-        } catch (e) {
-            throw e
-        }
+            return true
     }
     const getProfile = async () => {
-        try {
-            const profile = await fetch(`https://back-production-1f03.up.railway.app/users`, {
-                headers: {
-                    'Authorization': `Bearer ${userInfo.token}`
-                }
-            })
-            const data = await profile.json()
-            if (
-                profile.ok &&
-                data?.data[0]
-            ) {
-                const userProfile = data.data[0]
-                userInfo.userName = userProfile.userName || userInfo.userName
-                userInfo.avatar = userProfile.avatar || userInfo.avatar
+        const profile = await fetch(`https://back-production-1f03.up.railway.app/users`, {
+            headers: {
+                'Authorization': `Bearer ${userInfo.token}`
             }
-        } catch (e) {
-            throw e
+        })
+        const data = await profile.json()
+        if (
+            profile.ok &&
+            data?.data[0]
+        ) {
+            const userProfile = data.data[0]
+            userInfo.userName = userProfile.userName || userInfo.userName
+            userInfo.avatar = userProfile.avatar || userInfo.avatar
+            return true
         }
+        return false
     }
     const login = async (account, passWord) => {
-        try {
-            await verifyData(account, passWord)
-            await getProfile()
-        } catch (e) {
+        const isPass = await verifyData(account, passWord)
+        const isGet = await getProfile()
+        if(isPass&&isGet){
             isLogin.value = false
-            throw e
+            ElMessage.success('登录成功')
+            return true
         }
+        return false
     }
 
     const logOut = () => {
